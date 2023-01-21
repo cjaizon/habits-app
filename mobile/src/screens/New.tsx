@@ -1,15 +1,33 @@
-import { ScrollView, Text, TextInput, View } from "react-native"
+import { useState } from "react"
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Feather } from "@expo/vector-icons";
 
 import { BackButton } from "../components/BackButton"
 import { Checkbox } from "../components/Checkbox"
+import colors from "tailwindcss/colors";
 
+const avaliableWeekDays = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
 
 export const New = () => {
+
+    const [weekDays, setWeekDays] = useState<number[]>([])
+
+    const handleToggleWeekDay = (weekDayIndex: number) => {
+        if (weekDays.includes(weekDayIndex)) {
+            setWeekDays(prevState => prevState.filter(weekDay => weekDay != weekDayIndex))
+        } else {
+            setWeekDays(prevState => [...prevState, weekDayIndex])
+        }
+    }
+
     return (
         <View
             className="flex-1 bg-background px-8 pt-16"
         >
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 100 }}
+            >
 
                 <BackButton />
                 <Text
@@ -24,10 +42,42 @@ export const New = () => {
                 </Text>
 
                 <TextInput
-                    className="h-12 pl-4 rounded-lg mt-3 bg-zinc-800 text-white focus:border-2 focus:border-green-600"
+                    placeholder="Exercícios, domir bem, etc..."
+                    placeholderTextColor={colors.zinc[500]}
+                    className="h-12 pl-4 rounded-lg mt-3 bg-zinc-800 text-white border-2 border-zinc-600 focus:border-green-600"
                 />
 
-                <Checkbox />
+                <Text className="font-semibold mt-4 mb-3 text-base text-white">
+                    Qual a recorrência?
+                </Text>
+
+                {
+                    avaliableWeekDays.map((weekDay, index) =>
+                        <Checkbox
+                            key={weekDay}
+                            title={weekDay}
+                            checked={weekDays.includes(index)}
+                            onPress={() => handleToggleWeekDay(index)}
+                        />
+                    )
+                }
+
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    className='flex-row w-full h-14 items-center justify-center bg-green-600 rounded-md mt-6'
+                >
+                    <Feather
+                        name='check'
+                        size={20}
+                        color={colors.white}
+                    />
+                    <Text
+                        className="font-semibold text-base text-white ml-2"
+                    >
+                        Confirmar
+                    </Text>
+                </TouchableOpacity>
+
             </ScrollView>
         </View>
     )
