@@ -21,7 +21,7 @@ export const SummaryTable = () => {
     const ammountOfDaysToFil = minimumSummaryDatesSize - summaryDates.length
 
     useEffect(() => {
-        api.get('summary').then(response => {
+        api.get('/summary').then(response => {
             setSummary(response.data)
         })
     }, [])
@@ -40,7 +40,7 @@ export const SummaryTable = () => {
             </div>
             <div className="grid grid-rows-7 grid-flow-col gap-2">
                 {
-                    summaryDates.map(date => {
+                    summary.length > 0 && summaryDates.map(date => {
                         const dayInSummary = summary.find(day => dayjs(date).isSame(day.date, 'day'))
 
                         return (
@@ -48,7 +48,7 @@ export const SummaryTable = () => {
                                 key={date.toString()}
                                 date={date}
                                 amount={dayInSummary?.amount}
-                                completed={dayInSummary?.completed}
+                                defaultCompleted={dayInSummary?.completed}
                             />
                         )
                     })

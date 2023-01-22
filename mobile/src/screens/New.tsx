@@ -1,14 +1,16 @@
 import { useState } from "react"
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { Feather } from "@expo/vector-icons";
 
 import { BackButton } from "../components/BackButton"
 import { Checkbox } from "../components/Checkbox"
 import colors from "tailwindcss/colors";
+import { api } from "../lib/axios";
 
 const avaliableWeekDays = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado']
 
 export const New = () => {
+    const [title, setTitle] = useState('')
 
     const [weekDays, setWeekDays] = useState<number[]>([])
 
@@ -17,6 +19,25 @@ export const New = () => {
             setWeekDays(prevState => prevState.filter(weekDay => weekDay != weekDayIndex))
         } else {
             setWeekDays(prevState => [...prevState, weekDayIndex])
+        }
+    }
+
+    const handleCreateNewHabit = async () => {
+        try {
+            if (!title || weekDays.length === 0) {
+                Alert.alert('Informações faltando', 'É necessário informar um título e escolher pelo menos 1 dia para criar um novo hábito!')
+            } else {
+                await api.post('/habits', { title, weekDays })
+
+                setTitle('')
+                setWeekDays([])
+
+                Alert.alert('É isso aí', 'Novo hábito criado com sucesso!')
+            }
+
+        } catch (error) {
+            Alert.alert('Ops', 'Não foi possível criar um novo hábito!')
+            console.log(error);
         }
     }
 
@@ -45,6 +66,8 @@ export const New = () => {
                     placeholder="Exercícios, domir bem, etc..."
                     placeholderTextColor={colors.zinc[500]}
                     className="h-12 pl-4 rounded-lg mt-3 bg-zinc-800 text-white border-2 border-zinc-600 focus:border-green-600"
+                    onChangeText={setTitle}
+                    value={title}
                 />
 
                 <Text className="font-semibold mt-4 mb-3 text-base text-white">
@@ -65,6 +88,7 @@ export const New = () => {
                 <TouchableOpacity
                     activeOpacity={0.7}
                     className='flex-row w-full h-14 items-center justify-center bg-green-600 rounded-md mt-6'
+                    onPress={handleCreateNewHabit}
                 >
                     <Feather
                         name='check'

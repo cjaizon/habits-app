@@ -11,7 +11,7 @@ export const ProgressBar = ({ progress }: ProgressBarProps) => {
                 role="progressbar"
                 aria-label='Progresso de hábitos completados nesse dia'
                 aria-valuenow={progress}
-                className={`h-full rounded-xl bg-violet-600`}
+                className={`h-full rounded-xl bg-violet-600 transition-all`}
                 style={{ width: `${progress}%` }}
             />
         </div>
