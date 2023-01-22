@@ -25,7 +25,7 @@ export const New = () => {
     const handleCreateNewHabit = async () => {
         try {
             if (!title || weekDays.length === 0) {
-                Alert.alert('Informações faltando', 'É necessário informar um título e escolher pelo menos 1 dia para criar um novo hábito!')
+                return Alert.alert('Informações faltando', 'É necessário informar um título e escolher pelo menos 1 dia para criar um novo hábito!')
             } else {
                 await api.post('/habits', { title, weekDays })
 
