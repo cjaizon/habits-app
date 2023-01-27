@@ -1,0 +1,28 @@
+{
+  "type": "module",
+  "name": "fireserver",
+  "version": "1.0.0",
+  "description": "server using firebase instead",
+  "main": "src/server.ts",
+  "author": "Jaizon Carlos",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "start:dev": "tsx watch src/server.ts",
+    "start:build": "tsup src",
+    "start:test": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "tsup": "^6.5.0",
+    "tsx": "^3.12.2",
+    "typescript": "^4.9.4",
+    "vitest": "^0.28.2"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.2.0",
+    "dayjs": "^1.11.7",
+    "fastify": "^4.12.0",
+    "zod": "^3.20.2"
+  }
+}
