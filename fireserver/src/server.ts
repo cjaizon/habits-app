@@ -1,17 +1,16 @@
-import Fastify from 'fastify'
-import cors from '@fastify/cors'
-import { appRoutes } from './lib/routes/appRoutes.js'
-import { authRoutes } from './lib/routes/authRoutes.js'
+import express from 'express'
+import cors from 'cors'
+import { Auth } from './lib/middleware/Auth'
+import summaryRoute from './lib/routes/Summary'
 
-const app = Fastify()
+const app = express()
+const auth = new Auth()
+const port = 3333
 
-app.register(cors)
-app.register(appRoutes)
-app.register(authRoutes)
+app.use(cors())
+app.use(auth.decodeToken)
+app.use(summaryRoute)
 
-app
-  .listen({
-    port: 3333,
-    host: '0.0.0.0',
-  })
-  .then((port) => console.log(`HTTP Server running on port ${port}!`))
+app.listen(port, () => {
+  console.log(`HTTP Server running on port ${port}!`)
+})

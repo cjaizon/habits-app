@@ -1,8 +1,9 @@
 import { HabitDay } from "./HabitDay"
 import { generateDatesFromYearBeginning } from '../utils/generate-dates-from-year-beginning'
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { api } from "../lib/axios"
 import dayjs from "dayjs"
+import { AuthContext } from "../contexts/AuthContext"
 
 type Summary = {
     id: string
@@ -13,6 +14,8 @@ type Summary = {
 
 export const SummaryTable = () => {
     const [summary, setSummary] = useState<Summary>([])
+    const { userToken } = useContext(AuthContext)
+
 
     const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
     const summaryDates = generateDatesFromYearBeginning()
@@ -20,10 +23,28 @@ export const SummaryTable = () => {
     const minimumSummaryDatesSize = 18 * 7
     const ammountOfDaysToFil = minimumSummaryDatesSize - summaryDates.length
 
-    useEffect(() => {
-        api.get('/summary').then(response => {
-            setSummary(response.data)
+    const fetchData = async (token: string) => {
+
+        const res = await api.get('/summary', {
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+
         })
+
+        console.log(res);
+
+
+
+        setSummary(res.data)
+    }
+
+    useEffect(() => {
+
+        if (userToken) {
+            fetchData(userToken)
+        }
+
     }, [])
 
 

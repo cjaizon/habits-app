@@ -129,7 +129,9 @@ export const appRoutes = async (app: FastifyInstance) => {
     }
   })
 
-  app.get('/summary', async (request) => {
+  app.get('/summary', async (res, req) => {
+    console.log('chegou')
+
     // return array with many
     const summary = await prisma.$queryRaw`
             SELECT
